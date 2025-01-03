@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pancake 流动性池模拟器</title>
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .chart-container {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">Pancake 流动性池模拟器</h1>
+
+        <!-- 图表容器 -->
+        <div class="bg-white rounded-lg shadow-lg p-4 mb-8">
+            <div id="chart" class="chart-container"></div>
+        </div>
+
+        <!-- 控制面板 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- 流动性操作 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">流动性操作</h2>
+
+                <!-- 添加流动性 -->
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">添加流动性</h3>
+                    <div class="flex gap-4 mb-2">
+                        <input type="number" id="addAmountA" placeholder="Token A 数量"
+                               class="flex-1 border rounded px-3 py-2">
+                        <input type="number" id="addAmountB" placeholder="Token B 数量"
+                               class="flex-1 border rounded px-3 py-2">
+                    </div>
+                    <button onclick="addLiquidity()"
+                            class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        添加流动性
+                    </button>
+                </div>
+
+                <!-- 提取流动性 -->
+                <div>
+                    <h3 class="font-medium mb-2">提取流动性</h3>
+                    <div class="flex gap-4 mb-2">
+                        <input type="number" id="removePercentage" placeholder="提取百分比"
+                               class="flex-1 border rounded px-3 py-2">
+                    </div>
+                    <button onclick="removeLiquidity()"
+                            class="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                        提取流动性
+                    </button>
+                </div>
+            </div>
+
+            <!-- 价格控制 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">价格控制</h2>
+
+                <!-- 手动交易 -->
+                <div class="mb-6">
+                    <h3 class="font-medium mb-2">手动交易</h3>
+                    <div class="flex gap-4 mb-2">
+                        <input type="number" id="tradeAmount" placeholder="交易数量"
+                               class="flex-1 border rounded px-3 py-2">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="executeTrade('buy')"
+                                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                            买入
+                        </button>
+                        <button onclick="executeTrade('sell')"
+                                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                            卖出
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 自动交易控制 -->
+                <div>
+                    <h3 class="font-medium mb-2">自动价格控制</h3>
+                    <div class="flex gap-4 mb-2">
+                        <input type="number" id="targetPrice" placeholder="目标价格"
+                               class="flex-1 border rounded px-3 py-2" step="0.0001">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="startAutoTrading()"
+                                class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
+                            开始控制
+                        </button>
+                        <button onclick="stopAutoTrading()"
+                                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            停止控制
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 市场状态 -->
+        <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">市场状态</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <div>
+                    <p class="text-gray-600">Token A 储备</p>
+                    <p id="tokenAReserve" class="text-2xl font-bold">-</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Token B 储备</p>
+                    <p id="tokenBReserve" class="text-2xl font-bold">-</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">当前价格</p>
+                    <p id="currentPrice" class="text-2xl font-bold">-</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">目标价格</p>
+                    <p id="targetPriceDisplay" class="text-2xl font-bold">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
