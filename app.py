@@ -180,4 +180,4 @@ if __name__ == '__main__':
     market_thread.start()
 
     # 启动Flask应用
-    app.run(debug=True, threaded=True)
+    app.run(debug=True, threaded=True, host='0.0.0.0', port=289)
